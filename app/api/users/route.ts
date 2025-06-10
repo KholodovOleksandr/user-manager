@@ -1,4 +1,4 @@
-import { createUser, User } from '@/lib/db/usersRepo'
+import { createUser, deleteAllUsers, User } from '@/lib/db/usersRepo'
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 
@@ -32,4 +32,15 @@ export async function POST(req: Request) {
     } as User)
 
     return NextResponse.json({ success: true })
+}
+
+export async function DELETE() {
+    try {
+        await deleteAllUsers()
+
+        return NextResponse.json({ success: true })
+    } catch (err) {
+        console.error('Failed to delete users:', err)
+        return NextResponse.json({ error: 'Failed to delete users' }, { status: 500 })
+    }
 }

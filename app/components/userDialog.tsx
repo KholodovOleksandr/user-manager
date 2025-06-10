@@ -59,7 +59,6 @@ export function UserDialog(props: {
     props.onClosed();
   }
 
-
   return (
     <Dialog open={props.isOpen} onOpenChange={onOpenChangeHandler}>
       <DialogContent className="sm:max-w-[425px]">
@@ -102,7 +101,7 @@ export function UserDialog(props: {
           <DialogClose asChild>
             <Button variant="outline" disabled={loading}>Cancel</Button>
           </DialogClose>
-          <Button type="submit" onClick={handleSubmit}>
+          <Button type="submit" onClick={handleSubmit} disabled={loading} >
             {loading ? "Saving..." : "Save"}
           </Button>
         </DialogFooter>

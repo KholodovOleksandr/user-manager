@@ -1,14 +1,39 @@
 "use client"
 
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { User } from '@/lib/db/usersRepo';
+import { useRouter } from "next/navigation";
+import { Button } from './button';
 
+import { useState } from 'react';
+import DeleteUserConfirmDialog from './deleteUsersDialog';
 export default function UsersTable({
     users
 }: {
     users: User[]
 }) {
+    const router = useRouter()
+
+    const [userIdToDelete, setUserIdToDelete] = useState<number | null>(null);
+
+    function confirmDeleteUser(userId: number) {
+        setUserIdToDelete(userId);
+    }
+
+    function onDeleteUserClosed(isDeleted: boolean) {
+        if (isDeleted) {
+            router.refresh();
+        }
+        setUserIdToDelete(null);
+    }
+
     return (
         <div className="mt-6 flow-root">
+            <DeleteUserConfirmDialog isOpen={!!userIdToDelete}
+                userId={userIdToDelete}
+                onClosed={onDeleteUserClosed}>
+            </DeleteUserConfirmDialog>
+
             <div className="inline-block min-w-full align-middle">
                 <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
 

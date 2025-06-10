@@ -8,7 +8,7 @@ export type User = {
 }
 
 export async function getUsers(take: number, skip: number) {
-    return (await prisma.user.findMany({ take: take, skip: skip, orderBy: [{ Id: "desc" }] })) as User[];//.map(u => )
+    return (await prisma.user.findMany({ take: take, skip: skip, orderBy: [{ Id: "desc" }] })) as User[];
 }
 
 export async function getUsersCount() {
