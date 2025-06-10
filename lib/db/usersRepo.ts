@@ -1,18 +1,18 @@
 import { prisma } from "../prisma";
 
 export type User = {
-    Id: number,
+    Id: number | undefined,
     Name: string,
     Email: string,
     CreatedAt: Date
 }
 
 export async function getUsers(take: number, skip: number) {
-    (await prisma.user.findMany({ take: take, skip: skip }));//.map(u => )
+    return (await prisma.user.findMany({ take: take, skip: skip, orderBy: [{ Id: "desc" }] })) as User[];//.map(u => )
 }
 
-export async function getUsersCount(take: number, skip: number) {
-    await prisma.user.count();
+export async function getUsersCount() {
+    return await prisma.user.count();
 }
 
 export async function createUser(user: User) {
