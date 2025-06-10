@@ -6,13 +6,26 @@ import { useRouter } from "next/navigation";
 import { Button } from './button';
 
 import { useState } from 'react';
+import { UserDialog } from './userDialog';
 import DeleteUserConfirmDialog from './deleteUsersDialog';
+import { toast } from 'sonner';
+
 export default function UsersTable({
     users
 }: {
     users: User[]
 }) {
     const router = useRouter()
+    const [userToEdit, setUserToEdit] = useState<User | null>(null);
+
+    function editUser(user: User | null) {
+        setUserToEdit(user);
+    }
+
+    function onSavedHandler() {
+        toast("User has been updated!");
+        router.refresh();
+    }
 
     const [userIdToDelete, setUserIdToDelete] = useState<number | null>(null);
 
@@ -22,6 +35,7 @@ export default function UsersTable({
 
     function onDeleteUserClosed(isDeleted: boolean) {
         if (isDeleted) {
+            toast("User has been deleted!");
             router.refresh();
         }
         setUserIdToDelete(null);
@@ -33,6 +47,12 @@ export default function UsersTable({
                 userId={userIdToDelete}
                 onClosed={onDeleteUserClosed}>
             </DeleteUserConfirmDialog>
+
+            <UserDialog isOpen={!!userToEdit} title="Edit User"
+                user={userToEdit}
+                onClosed={() => editUser(null)}
+                onSaved={onSavedHandler}
+            ></UserDialog>
 
             <div className="inline-block min-w-full align-middle">
                 <div className="rounded-lg bg-gray-50 p-2 md:pt-0">
@@ -73,7 +93,12 @@ export default function UsersTable({
                                     </td>
                                     <td className="whitespace-nowrap py-3 pl-6 pr-3">
                                         <div className="flex justify-end gap-3">
-                                            
+                                            <Button onClick={() => editUser(user)} >
+                                                <PencilIcon className="w-5" />
+                                            </Button>
+                                            <Button variant="default" onClick={() => confirmDeleteUser(user.Id!)}>
+                                                <TrashIcon className="w-5" />
+                                            </Button>
                                         </div>
                                     </td>
                                 </tr>

@@ -11,7 +11,8 @@ import {
   DialogTitle
 } from "./dialog"
 import { Input } from "./input"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { DatePicker } from "./date-picker";
 
 
 export function UserDialog(props: {
@@ -27,17 +28,36 @@ export function UserDialog(props: {
 
   const [name, setName] = useState(props.user?.Name ?? "")
   const [email, setEmail] = useState(props.user?.Email ?? "")
-  const [errors, setErrors] = useState<{ name?: string[], email?: string[] }>({})
+  const [createdAt, setCreatedAt] = useState(props.user?.CreatedAt)
+  const [errors, setErrors] = useState<{ name?: string[], email?: string[], createdAt?: string[] }>({})
   const [loading, setLoading] = useState(false)
+
+  // useState initialize value first time component renders. 
+  // ad hoc solution for "Edit User" functionality to init inputs' fields
+  useEffect(() => {
+    if (props.user) {
+      setName(props.user.Name);
+      setEmail(props.user.Email);
+      setCreatedAt(props.user.CreatedAt);
+    }
+  }, [props.user]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
     setErrors({})
 
-    const res = await fetch("/api/users", {
-      method: "POST",
-      body: JSON.stringify({ name, email, createdAt: new Date().toISOString() }),
+    let path = '/api/users';
+    let method = 'POST'
+
+    if (props.user) {
+      path += '/' + props.user.Id;
+      method = 'PUT';
+    }
+
+    const res = await fetch(path, {
+      method: method,
+      body: JSON.stringify({ name, email, createdAt: createdAt }),
       headers: { "Content-Type": "application/json" }
     })
 
@@ -91,6 +111,18 @@ export function UserDialog(props: {
           <div id="email-error" aria-live="polite" aria-atomic="true">
             {errors?.email &&
               errors.email.map((error: string) => (
+                <p className="mt-2 text-sm text-red-500" key={error}>
+                  {error}
+                </p>
+              ))}
+          </div>
+          <div className="grid gap-3">
+            <label htmlFor="createdAt">Created At</label>
+            <DatePicker date={createdAt} onChange={setCreatedAt} />
+          </div>
+          <div id="createdAt-error" aria-live="polite" aria-atomic="true">
+            {errors?.createdAt &&
+              errors.createdAt.map((error: string) => (
                 <p className="mt-2 text-sm text-red-500" key={error}>
                   {error}
                 </p>

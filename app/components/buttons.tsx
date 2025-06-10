@@ -5,6 +5,7 @@ import { UserDialog } from './userDialog';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import DeleteUserConfirmDialog from './deleteUsersDialog';
+import { toast } from 'sonner';
 
 export function CreateUser() {
     const router = useRouter()
@@ -15,6 +16,7 @@ export function CreateUser() {
     }
 
     function onSavedHandler() {
+        toast("User has been created!");
         handleDialogVisibility(false);
         router.refresh();
     }
@@ -38,6 +40,7 @@ export function DeleteUsers() {
 
     function onDeleteUserClosed(isDeleted: boolean) {
         if (isDeleted) {
+            toast("All users have been deleted!");
             router.refresh();
         }
 

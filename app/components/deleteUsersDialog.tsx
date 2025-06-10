@@ -7,6 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "./dialog"
+import { toast } from "sonner"
 
 
 export default function DeleteUserConfirmDialog(props: {
@@ -27,14 +28,14 @@ export default function DeleteUserConfirmDialog(props: {
     const handleDelete = async () => {
         if (!props.userId)
             return;
-        
+
         setLoading(true)
         try {
             const res = await fetch(`/api/users/${isBulkDelete() ? '' : props.userId}`, { method: "DELETE" })
             if (res.ok) {
                 props.onClosed(true);
             } else {
-                console.error("Failed to delete")
+                toast("An error has occurred, please try again later!");
             }
         } catch (err) {
             console.error("Delete error", err)
