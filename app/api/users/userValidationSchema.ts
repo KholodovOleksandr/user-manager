@@ -8,9 +8,8 @@ export const schema = z.object({
         .string({ message: nameMessage })
         .min(1, nameMessage)
         .max(256, nameMessage),
-    email: z.string({ message: emailMessage })
+    email: z.string()
         .email({ message: emailMessage })
-        .min(1, emailMessage)
         .max(256, emailMessage),
     createdAt: z.coerce.date()
 })
