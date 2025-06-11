@@ -74,6 +74,7 @@ export function UserDialog(props: {
   function handleSuccessSave() {
     setName("");
     setEmail("");
+    setCreatedAt(undefined);
     setLoading(false);
     props.onSaved();
     props.onClosed();

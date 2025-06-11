@@ -2,7 +2,8 @@ import UsersTable from "@/app/components/usersTable"
 import { getUsers, getUsersCount } from "@/lib/db/usersRepo";
 import { redirect } from "next/navigation";
 import Pagination from "@/app/components/pagination";
-import { CreateUser, DeleteUsers } from "./components/buttons";
+import { CreateUser, DeleteUsers, UploadUsers } from "./components/buttons";
+import { UploadXlsx } from "./components/upload-xlsx";
 
 const pageSize = 10;
 
@@ -29,6 +30,7 @@ export default async function Page(props: {
       <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
         <CreateUser></CreateUser>
         <DeleteUsers></DeleteUsers>
+        <UploadXlsx></UploadXlsx>
       </div>
       <UsersTable users={users}></UsersTable>
       <div className="mt-5 flex w-full justify-center">

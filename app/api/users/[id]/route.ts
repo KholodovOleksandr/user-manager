@@ -1,4 +1,4 @@
-import { deleteUser, updateUser } from '@/lib/db/usersRepo'
+import { deleteUser, getUserIdsByEmails, updateUser } from '@/lib/db/usersRepo'
 import { NextRequest, NextResponse } from 'next/server'
 import { schema } from '../userValidationSchema'
 
@@ -17,6 +17,14 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
       { errors: parsed.error.flatten().fieldErrors },
       { status: 400 }
     )
+  }
+
+  if ((await getUserIdsByEmails([parsed.data.email], userId)).length) {
+    return NextResponse.json({
+      errors: { "email": ["Such email already exists"] }
+    },
+      { status: 400 }
+    );
   }
 
   try {

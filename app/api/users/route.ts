@@ -1,4 +1,4 @@
-import { createUser, deleteAllUsers, User } from '@/lib/db/usersRepo'
+import { createUser, deleteAllUsers, getUserIdsByEmails, User } from '@/lib/db/usersRepo'
 import { NextResponse } from 'next/server'
 import { schema } from './userValidationSchema'
 
@@ -12,8 +12,20 @@ export async function POST(req: Request) {
             { status: 400 }
         )
     }
-
-    // TODO: validate that email does not exist yet
+    
+    if ((await getUserIdsByEmails([parsed.data.email])).length) {
+        return NextResponse.json(
+            {
+                errors: {
+                    email: [
+                        "This Email already exists"
+                    ],
+                }
+            },
+            { status: 400 }
+        )
+    }
+    
     await createUser({
         Name: parsed.data.name,
         Email: parsed.data.email,
