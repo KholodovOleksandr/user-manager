@@ -9,9 +9,9 @@ import { usePathname, useSearchParams } from 'next/navigation';
 export default function Pagination({ totalPages }: { totalPages: number }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  
+
   const currentPage = Number(searchParams.get('page')) || 1;
-    const createPageURL = (pageNumber: number | string) => {
+  const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
     params.set('page', pageNumber.toString());
     return `${pathname}?${params.toString()}`;
@@ -21,14 +21,14 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
 
   return (
     <>
-      <div className="inline-flex">
-        <PaginationArrow
-          direction="left"
-          href={createPageURL(currentPage - 1)}
-          isDisabled={currentPage <= 1}
-        />
+      <div className="flex justify-center">
+        <div className="inline-flex items-center gap-1 md:gap-2">
+          <PaginationArrow
+            direction="left"
+            href={createPageURL(currentPage - 1)}
+            isDisabled={currentPage <= 1}
+          />
 
-        <div className="flex -space-x-px">
           {allPages.map((page, index) => {
             let position: 'first' | 'last' | 'single' | 'middle' | undefined;
 
@@ -47,17 +47,18 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
               />
             );
           })}
-        </div>
 
-        <PaginationArrow
-          direction="right"
-          href={createPageURL(currentPage + 1)}
-          isDisabled={currentPage >= totalPages}
-        />
+          <PaginationArrow
+            direction="right"
+            href={createPageURL(currentPage + 1)}
+            isDisabled={currentPage >= totalPages}
+          />
+        </div>
       </div>
     </>
   );
 }
+
 
 function PaginationNumber({
   page,
@@ -71,17 +72,18 @@ function PaginationNumber({
   isActive: boolean;
 }) {
   const className = clsx(
-    'flex h-10 w-10 items-center justify-center text-sm border',
+    'flex h-10 w-10 items-center justify-center border text-sm font-medium transition-colors',
     {
       'rounded-l-md': position === 'first' || position === 'single',
       'rounded-r-md': position === 'last' || position === 'single',
-      'z-10 bg-blue-600 border-blue-600 text-white': isActive,
-      'hover:bg-gray-100': !isActive && position !== 'middle',
-      'text-gray-300': position === 'middle',
-    },
+      'bg-primary text-primary-foreground border-primary z-10': isActive,
+      'hover:bg-muted cursor-pointer': !isActive && position !== 'middle',
+      'text-muted-foreground': position === 'middle',
+      'cursor-default': position === 'middle' || isActive,
+    }
   );
 
-  return isActive || position === 'middle' ? (
+  return typeof page === 'string' || isActive ? (
     <div className={className}>{page}</div>
   ) : (
     <Link href={href} className={className}>
@@ -89,6 +91,7 @@ function PaginationNumber({
     </Link>
   );
 }
+
 
 function PaginationArrow({
   href,
@@ -100,26 +103,26 @@ function PaginationArrow({
   isDisabled?: boolean;
 }) {
   const className = clsx(
-    'flex h-10 w-10 items-center justify-center rounded-md border',
+    'flex h-10 w-10 items-center justify-center rounded-md border text-sm font-medium transition-colors',
     {
-      'pointer-events-none text-gray-300': isDisabled,
-      'hover:bg-gray-100': !isDisabled,
+      'text-muted-foreground border-muted cursor-default pointer-events-none': isDisabled,
+      'hover:bg-muted bg-background': !isDisabled,
       'mr-2 md:mr-4': direction === 'left',
       'ml-2 md:ml-4': direction === 'right',
-    },
+    }
   );
 
   const icon =
     direction === 'left' ? (
-      <ArrowLeftIcon className="w-4" />
+      <ArrowLeftIcon className="w-4 h-4" />
     ) : (
-      <ArrowRightIcon className="w-4" />
+      <ArrowRightIcon className="w-4 h-4" />
     );
 
   return isDisabled ? (
     <div className={className}>{icon}</div>
   ) : (
-    <Link className={className} href={href}>
+    <Link href={href} className={className}>
       {icon}
     </Link>
   );

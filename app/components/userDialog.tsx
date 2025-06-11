@@ -85,13 +85,9 @@ export function UserDialog(props: {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{props.title}</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you&apos;re
-            done.
-          </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4">
-          <div className="grid gap-3">
+        <div className="grid gap-1">
+          <div className="flex items-center gap-4 mb-2">
             <label htmlFor="name">Name</label>
             <Input id="name" name="name" type="string" value={name}
               onChange={(e) => setName(e.target.value)} />
@@ -99,12 +95,12 @@ export function UserDialog(props: {
           <div id="name-error" aria-live="polite" aria-atomic="true">
             {errors?.name &&
               errors.name.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
+                <p className="mb-4 text-sm text-red-500" key={error}>
                   {error}
                 </p>
               ))}
           </div>
-          <div className="grid gap-3">
+          <div className="flex items-center gap-4 mb-2">
             <label htmlFor="email">Email</label>
             <Input id="email" name="email" type="email" value={email}
               onChange={(e) => setEmail(e.target.value)} />
@@ -112,19 +108,19 @@ export function UserDialog(props: {
           <div id="email-error" aria-live="polite" aria-atomic="true">
             {errors?.email &&
               errors.email.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
+                <p className="mb-4 text-sm text-red-500" key={error}>
                   {error}
                 </p>
               ))}
           </div>
-          <div className="grid gap-3">
+          <div className="flex items-center gap-4 mb-2">
             <label htmlFor="createdAt">Created At</label>
             <DatePicker date={createdAt} onChange={setCreatedAt} />
           </div>
           <div id="createdAt-error" aria-live="polite" aria-atomic="true">
             {errors?.createdAt &&
               errors.createdAt.map((error: string) => (
-                <p className="mt-2 text-sm text-red-500" key={error}>
+                <p className="mb-4 text-sm text-red-500" key={error}>
                   {error}
                 </p>
               ))}

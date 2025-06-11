@@ -69,7 +69,7 @@ export default function UsersTable({
                                 <th scope="col" className="px-3 py-5 font-medium">
                                     Created At
                                 </th>
-                                <th scope="col" className="px-3 py-5 font-medium">
+                                <th scope="col" className="px-3 py-5 font-medium text-right">
                                     Actions
                                 </th>
                             </tr>

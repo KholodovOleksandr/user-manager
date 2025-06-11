@@ -2,7 +2,7 @@ import UsersTable from "@/app/components/usersTable"
 import { getUsers, getUsersCount } from "@/lib/db/usersRepo";
 import { redirect } from "next/navigation";
 import Pagination from "@/app/components/pagination";
-import { CreateUser, DeleteUsers, UploadUsers } from "./components/buttons";
+import { CreateUser, DeleteUsers } from "./components/buttons";
 import { UploadXlsx } from "./components/upload-xlsx";
 
 const pageSize = 10;
@@ -21,21 +21,31 @@ export default async function Page(props: {
   }
 
   const users = await getUsers(pageSize, skip);
-  
+
   return (
-    <div className="w-full">
-      <div className="flex w-full items-center justify-between">
-        <h1 className={`text-2xl`}>Users</h1>
+    <div className="w-full p-6 md:p-10">
+      {/* Page Title */}
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-semibold tracking-tight">Users</h1>
       </div>
-      <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-        <CreateUser></CreateUser>
-        <DeleteUsers></DeleteUsers>
-        <UploadXlsx></UploadXlsx>
+
+      {/* Action Buttons */}
+      <div className="flex flex-wrap justify-end gap-2 mb-6">
+        <CreateUser />
+        <DeleteUsers />
+        <UploadXlsx />
       </div>
-      <UsersTable users={users}></UsersTable>
-      <div className="mt-5 flex w-full justify-center">
+
+      {/* Users Table */}
+      <div className="mb-6">
+        <UsersTable users={users} />
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center">
         <Pagination totalPages={Math.ceil(totalCount / pageSize)} />
       </div>
     </div>
+
   );
 }
